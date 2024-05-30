@@ -1,7 +1,19 @@
 const express = require("express");
-const path = require("node:path");
+const mongoose = require("mongoose");
 
+require("dotenv").config();
 const app = express();
+
+// connect to mongodb
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => {
+    console.log("Connected to MongoDB");
+    app.listen(3000, () => {
+      console.log("Server is running on port 3000");
+    });
+  })
+  .catch((err) => console.log("Error connecting to MongoDB", err.message));
 
 // Register view engine ejs
 app.set("view engine", "ejs");
@@ -44,8 +56,4 @@ app.get("/blogs/create", (req, res) => {
 app.use((req, res) => {
   // res.status(404).sendFile("./html/404.html", { root: __dirname });
   res.status(404).render("404", { title: "404" });
-});
-
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
 });
