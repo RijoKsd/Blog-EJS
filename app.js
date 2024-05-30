@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const Blog = require("./models/blog.model");
 
 require("dotenv").config();
 const app = express();
@@ -24,27 +25,30 @@ app.use(express.static("public")); // we can access the public folder from the b
 
 // Home route
 app.get("/", (req, res) => {
-  const blogs = [
-    {
-      title: "Yoshi finds eggs",
-      snippet: "Lorem ipsum dolor sit amet consectetur",
-    },
-    {
-      title: "Mario finds stars",
-      snippet: "Lorem ipsum dolor sit amet consectetur",
-    },
-    {
-      title: "How to defeat bowser",
-      snippet: "Lorem ipsum dolor sit amet consectetur",
-    },
-  ];
-  res.render("index", { title: "Home", blogs: blogs });
+  //   redirect to /blogs
+  res.redirect("/blogs");
 });
 
 // About route
 app.get("/about", (req, res) => {
   // res.sendFile("./html/about.html", { root: __dirname });
   res.render("about", { title: "About" });
+});
+
+// Blog routes
+
+app.get("/blogs", (req, res) => {
+  Blog.find()
+    .then((result) => {
+      console.log(result);
+      // res.send(result);
+      //  .sort({ createdAt: -1 }) to sort in descending order
+      res.render("index", { title: "All Blogs", blogs: result });
+
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 app.get("/blogs/create", (req, res) => {
