@@ -7,6 +7,9 @@ const app = express();
 app.set("view engine", "ejs");
 // app.set('views', 'html');
 
+// Middleware & static files
+app.use(express.static("public")); // we can access the public folder from the browser
+
 // Home route
 app.get("/", (req, res) => {
   const blogs = [
