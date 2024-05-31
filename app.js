@@ -6,12 +6,13 @@ require("dotenv").config();
 const app = express();
 
 // connect to mongodb
+const PORT = process.env.PORT 
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("Connected to MongoDB");
-    app.listen(3000, () => {
-      console.log("Server is running on port 3000");
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
     });
   })
   .catch((err) => console.log("Error connecting to MongoDB", err.message));
@@ -40,11 +41,9 @@ app.get("/about", (req, res) => {
 // Blog routes
 
 app.get("/blogs", (req, res) => {
-  Blog.find().sort({ createdAt: -1})
+  Blog.find()
+    .sort({ createdAt: -1 })
     .then((result) => {
-      console.log(result);
-      // res.send(result);
-      //  .sort({ createdAt: -1 }) to sort in descending order
       res.render("index", { title: "All Blogs", blogs: result });
     })
     .catch((err) => {
@@ -68,10 +67,37 @@ app.post("/blogs", async (req, res) => {
     console.log(err);
   }
 });
-
 app.get("/blogs/create", (req, res) => {
   res.render("create", { title: "Create a new blog" });
 });
+
+// go to blog details page by id
+app.get("/blogs/:id",async (req, res) => {
+  console.log(req.params.id, "id")
+  try{
+  
+    const blog = await Blog.findById(req.params.id);
+    res.render('details', {blog: blog, title: 'Blog Details'});
+  }catch(err){
+    console.log(err);
+  }
+   
+  
+});
+
+// delete blog by id
+app.delete("/blogs/:id", (req, res) => {
+  const id = req.params.id;
+  Blog.findByIdAndDelete(id)
+    .then((result) => {
+      res.json({ redirect: "/blogs" });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+
 
 // 404 page
 
