@@ -22,6 +22,8 @@ app.set("view engine", "ejs");
 
 // Middleware & static files
 app.use(express.static("public")); // we can access the public folder from the browser
+//  to parse the form data use the following middleware
+app.use(express.urlencoded({ extended: true }));
 
 // Home route
 app.get("/", (req, res) => {
@@ -44,12 +46,24 @@ app.get("/blogs", (req, res) => {
       // res.send(result);
       //  .sort({ createdAt: -1 }) to sort in descending order
       res.render("index", { title: "All Blogs", blogs: result });
-
     })
     .catch((err) => {
       console.log(err);
     });
 });
+
+// Create a new blog
+app.post('/blogs',(req,res)=>{
+  console.log(req.body)
+  const blog = new Blog(req.body);
+  blog.save().then((result)=>{
+    res.redirect('/blogs');
+  }).catch(err=>{
+    console.log(err)
+  })
+
+})
+
 
 app.get("/blogs/create", (req, res) => {
   res.render("create", { title: "Create a new blog" });
