@@ -4,26 +4,12 @@ const blog_index = (req, res) => {
   Blog.find()
     .sort({ createdAt: -1 })
     .then((result) => {
-      res.render("index", { title: "All Blogs", blogs: result });
+      res.render("blogs/index", { title: "All Blogs", blogs: result });
     })
     .catch((err) => {
       console.log(err);
     });
 };
-
-const blog_details = async (req, res) => {
-  try {
-    const blog = await Blog.findById(req.params.id);
-    res.render("details", { blog: blog, title: "Blog Details" });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const blog_create_get = (req, res) => {
-  res.render("create", { title: "Create a new blog" });
-};
-
 const blog_create_post = async (req, res) => {
   try {
     const blog = new Blog(req.body);
@@ -32,6 +18,19 @@ const blog_create_post = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+};
+
+const blog_details = async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    res.render("blogs/details", { blog: blog, title: "Blog Details" });
+  } catch (err) {
+    res.status(404).render("404", { title: "Blog not found" });
+  }
+};
+
+const blog_create_get = (req, res) => {
+  res.render("blogs/create", { title: "Create a new blog" });
 };
 
 const blog_delete = async (req, res) => {

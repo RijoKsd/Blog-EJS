@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('./partials/head.ejs') %>
+<%- include('../partials/head.ejs') %>
 
     <body>
-        <%- include('./partials/nav.ejs')%>
+        <%- include('../partials/nav.ejs')%>
 
             <!-- log blog -->
 
@@ -20,17 +20,18 @@
                     </p>
 
                 </div>
-                <a data-doc="<%= blog._id %>" class="delete">Delete</a>
+                <a data-doc="<%= blog._id %>" class="delete">
+                    <img src="/trash.svg" alt="delete blog">
+                </a>
             </div>
 
-            <%- include('./partials/footer.ejs') %>
+            <%- include('../partials/footer.ejs') %>
 
                 <script>
                     const deleteBtn = document.querySelector('a.delete');
 
                     deleteBtn.addEventListener('click', (e) => {
                         const id = deleteBtn.dataset.doc;
-                        console.log(id, "id from delete button");
                         fetch(`/blogs/${id}`,
                             { method: 'DELETE' })
                             .then((response) => response.json())

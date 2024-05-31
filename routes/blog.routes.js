@@ -7,6 +7,7 @@ router.get("/", blogController.blog_index);
 
 // Create a new blog
 router.post("/", blogController.blog_create_post);
+
 router.get("/create", blogController.blog_create_get);
 
 // go to blog details page by id

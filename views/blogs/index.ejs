@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<%- include('./partials/head.ejs') %>
+<%- include('../partials/head.ejs') %>
 
     <body>
         <!-- Nav from partials file -->
-        <%- include('./partials/nav.ejs') %>
+        <%- include('../partials/nav.ejs') %>
             <div class="blogs content">
                 <h2>All Blogs</h2>
                 <% if(blogs.length> 0) { %>
@@ -26,7 +26,7 @@
                                 <% } %>
             </div>
             <!-- Footer from partials file -->
-            <%-include('./partials/footer.ejs')%>
+            <%-include('../partials/footer.ejs')%>
 
     </body>
 
