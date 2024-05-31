@@ -40,7 +40,7 @@ app.get("/about", (req, res) => {
 // Blog routes
 
 app.get("/blogs", (req, res) => {
-  Blog.find()
+  Blog.find().sort({ createdAt: -1})
     .then((result) => {
       console.log(result);
       // res.send(result);
@@ -53,17 +53,21 @@ app.get("/blogs", (req, res) => {
 });
 
 // Create a new blog
-app.post('/blogs',(req,res)=>{
-  console.log(req.body)
-  const blog = new Blog(req.body);
-  blog.save().then((result)=>{
-    res.redirect('/blogs');
-  }).catch(err=>{
-    console.log(err)
-  })
-
-})
-
+app.post("/blogs", async (req, res) => {
+  //  const blog = new Blog(req.body);
+  // blog.save().then((result)=>{
+  //   res.redirect('/blogs');
+  // }).catch(err=>{
+  //   console.log(err)
+  // })
+  try {
+    const blog = new Blog(req.body);
+    const result = await blog.save();
+    res.redirect("/blogs");
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 app.get("/blogs/create", (req, res) => {
   res.render("create", { title: "Create a new blog" });
